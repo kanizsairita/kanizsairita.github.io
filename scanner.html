@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Check-in QR Scanner</title>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+<body>
+  <h2>Rendezvény beléptetés – QR szkenner</h2>
+  <div id="reader" style="width: 300px;"></div>
+  <p id="status"></p>
+
+  <script>
+    const formURL = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
+    const entryField = "entry.YOUR_ENTRY_ID"; // from the Google Form QR Data field
+
+    function sendToGoogleForm(qrText) {
+      const formData = new FormData();
+      formData.append(entryField, qrText);
+
+      fetch(formURL, {
+        method: "POST",
+        mode: "no-cors",
+        body: formData
+      });
+
+      document.getElementById("status").innerText = "Beolvasva és elküldve!";
+    }
+
+    function onScanSuccess(decodedText) {
+      document.getElementById("status").innerText = "Beolvasott adat: " + decodedText;
+      sendToGoogleForm(decodedText);
+    }
+
+    const html5QrCode = new Html5Qrcode("reader");
+    html5QrCode.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,
+        qrbox: 250
+      },
+      onScanSuccess
+    );
+  </script>
+</body>
+</html> 
