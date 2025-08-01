@@ -38,14 +38,14 @@
     if (scanLock) return;
 
     scanLock = true;
-    console.log("Scanned:", decodedText);
+    log("Scanned:", decodedText);
 
     // Send the data to Google Form
     submitToGoogleForm(decodedText);
 
     // Optional: stop scanner while processing
     html5QrCode.stop().then(() => {
-      console.log("Scanner stopped after scan.");
+      log("Scanner stopped after scan.");
 
       // Restart after 3 seconds if needed
       setTimeout(() => {
