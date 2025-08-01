@@ -26,20 +26,44 @@
       document.getElementById("status").innerText = "Beolvasva és elküldve!";
     }
 
-    function onScanSuccess(decodedText) {
-      document.getElementById("status").innerText = "Beolvasott adat: " + decodedText;
-      sendToGoogleForm(decodedText);
-    }
+    let scanLock = false;
 
-    const html5QrCode = new Html5Qrcode("reader");
-    html5QrCode.start(
-      { facingMode: "environment" },
-      {
-        fps: 10,
-        qrbox: 250
-      },
-      onScanSuccess
-    );
+  const html5QrCode = new Html5Qrcode("reader"); // "reader" is your div ID
+
+  function onScanSuccess(decodedText, decodedResult) {
+    if (scanLock) return;
+
+    scanLock = true;
+    console.log("Scanned:", decodedText);
+
+    // Send the data to Google Form
+    submitToGoogleForm(decodedText);
+
+    // Optional: stop scanner while processing
+    html5QrCode.stop().then(() => {
+      console.log("Scanner stopped after scan.");
+
+      // Restart after 3 seconds if needed
+      setTimeout(() => {
+        scanLock = false;
+        html5QrCode.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: 250 },
+          onScanSuccess
+        );
+      }, 3000);
+
+    }).catch(err => {
+      console.error("Error stopping scanner:", err);
+    });
+  }
+
+  // Start scanning
+  html5QrCode.start(
+    { facingMode: "environment" }, // use rear camera
+    { fps: 10, qrbox: 250 },
+    onScanSuccess
+  );
   </script>
 </body>
 </html> 
