@@ -14,6 +14,7 @@
     const entryField = "entry.792266662"; // from the Google Form QR Data field
 
     function sendToGoogleForm(qrText) {
+      log("Send To Google Form függvény meghívva.");
       const formData = new FormData();
       formData.append(entryField, qrText);
 
@@ -22,7 +23,7 @@
         mode: "no-cors",
         body: formData
       });
-
+      log("Send To Google Form függvény vége.");
       document.getElementById("status").innerText = "Beolvasva és elküldve!";
     }
 
@@ -39,7 +40,7 @@
 
     scanLock = true;
     log("Scanned:", decodedText);
-
+    log("Testing log");
     // Send the data to Google Form
     sendToGoogleForm(decodedText);
 
