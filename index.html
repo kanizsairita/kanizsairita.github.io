@@ -41,7 +41,7 @@
     log("Scanned:", decodedText);
 
     // Send the data to Google Form
-    submitToGoogleForm(decodedText);
+    sendToGoogleForm(decodedText);
 
     // Optional: stop scanner while processing
     html5QrCode.stop().then(() => {
